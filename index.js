@@ -409,7 +409,16 @@ async function full_lot_survey(luck_num, price, ism_ref) {
   let isover = [];
   const luckNLen = luck_num.length;
   console.log("Length: " + luckNLen);
-  if (luckNLen === 2) {
+  if (luck_num.includes("00-49")) {
+    //low
+    luck_num_type="low";
+  } else if (luck_num.includes("50-99")) {
+    // High
+    luck_num_type="high";
+  } else if (luckNLen === 1) {
+    // End up number
+    luck_num_type="last";
+  } else if (luckNLen === 2) {
     luck_num_type = "two_digits";
   } else if (luckNLen === 3) {
     luck_num_type = "three_digits";
@@ -509,7 +518,7 @@ app.get("/winreport", (req, res) => {
   WHERE i.ism_date ="${r_date}" and s.mem_id="${r_mem_id}" AND (s.sale_num = SUBSTRING(i.ism_result, -6, 6) OR s.sale_num = SUBSTRING(i.ism_result, -5, 5) OR s.sale_num = SUBSTRING(i.ism_result, -4, 4) OR s.sale_num = SUBSTRING(i.ism_result, -3, 3) OR = SUBSTRING(i.ism_result, -2, 2)) ORDER BY s.id DESC `;
   // WHERE i.ism_date ="${r_date}" and s.mem_id="${r_mem_id}" AND (s.sale_num LIKE CONCAT('%',SUBSTRING(i.ism_result, -6, 6)) OR s.sale_num LIKE CONCAT('%',SUBSTRING(i.ism_result, -5, 5)) OR s.sale_num LIKE CONCAT('%',SUBSTRING(i.ism_result, -4, 4)) OR s.sale_num LIKE CONCAT('%',SUBSTRING(i.ism_result, -3, 3)) OR s.sale_num LIKE CONCAT('%',SUBSTRING(i.ism_result, -2, 2))) ORDER BY s.id DESC `;
   //ABCD
-  console.log('UPDATE:==================WINREPORT');
+  console.log("UPDATE:==================WINREPORT");
   if (r_admin === "true") {
     sql = `SELECT s.*,i.ism_result FROM installment i 
     RIGHT JOIN sale s ON s.ism_id=i.ism_ref AND s.is_cancel=0
@@ -531,7 +540,7 @@ app.get("/winreport", (req, res) => {
 });
 app.post("/cancel", (req, res) => {
   const billId = req.body.billId;
-  const sql=`UPDATE sale SET is_cancel=1 WHERE sale_bill_id="${billId}"`;
+  const sql = `UPDATE sale SET is_cancel=1 WHERE sale_bill_id="${billId}"`;
   conn.db.query(sql, (er, result) => {
     if (er) {
       res.send("Error");
@@ -543,3 +552,4 @@ app.post("/cancel", (req, res) => {
 app.listen(port, () => {
   console.log("Yey, your server is running on port: " + port);
 });
+//update
