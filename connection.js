@@ -1,12 +1,12 @@
 const mysql = require("mysql");
-const db = mysql.createConnection({
-    user: "root",
-    host: "mariadb-35079-0.cloudclusters.net",
-    password: "admin2020",
-    database: "int_lottery_dev",
-    port:35079
-  });
-  
+const con = require("./package.json");
+const db = mysql.createPool({
+  host: con.dbConf.host,
+  user: con.dbConf.user,
+  password: con.dbConf.password,
+  database: con.dbConf.database,
+  port: con.dbConf.port,
+});
 
 module.exports={
     db,
