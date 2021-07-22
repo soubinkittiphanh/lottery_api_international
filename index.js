@@ -8,9 +8,14 @@ const conn = require("./connection");
 const con = require("./conn");
 const bcrypt = require("./custom-bcrypt");
 const { json } = require("express");
-
+const df = require("./package.json");
 app.get("/", (req, res) => {
-  res.send("Hello Welcome to JFILL Lottery");
+  const data=[
+    {"app":"SAVAN","host":df.dbConf.host,"db":df.dbConf.database,"api":""}
+  ];
+  res.send(data);
+  // res.send("Hello Welcome to SAVAN, You are connecting to: "+df.dbConf.host+" db: "+df.dbConf.database);
+  // res.send("abcd");
 });
 
 app.get("/employees", (req, res) => {
